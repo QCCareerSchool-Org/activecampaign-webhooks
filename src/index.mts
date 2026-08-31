@@ -1,5 +1,4 @@
 import compression from 'compression';
-import type { CorsOptions } from 'cors';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
@@ -10,10 +9,6 @@ import { globalErrorHandler } from '#handlers/globalErrorHandler.mjs';
 import { rawBodyParserMiddleware } from '#handlers/rawBodyParserMiddleware.mjs';
 import { smsReplyHandler } from '#handlers/smsReplyHandler.mjs';
 
-const corsOptions: CorsOptions = {
-  allowedHeaders: [ 'content-type', 'authorization' ],
-};
-
 const secretKey = process.env.SECRET_KEY;
 if (!secretKey) {
   throw Error('Environment variable SECRET_KEY not found.');
@@ -21,7 +16,7 @@ if (!secretKey) {
 
 const app = express();
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(helmet());
 app.use(compression());
 app.use(express.raw({ type: 'application/x-www-form-urlencoded' }));
