@@ -8,6 +8,9 @@ if (!url) {
 export const sendSlack = async (name: string, telephoneNumber: string, message: string): Promise<void> => {
   const response = await fetchWithRetry(url, {
     method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({
       text: `New message from ${name}`,
       blocks: [
