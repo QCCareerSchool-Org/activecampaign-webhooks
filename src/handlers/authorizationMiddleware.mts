@@ -29,6 +29,7 @@ export const getAuthorizationMiddleware = (secretKey: string): RequestHandler =>
 
   if (!matches(expected, received)) {
     res.status(401).send({ message: 'Invalid signature' });
+    return;
   }
 
   next();

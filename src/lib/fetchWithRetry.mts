@@ -15,10 +15,11 @@ export const fetchWithRetry = async (url: string, options: RequestInit = {}, ret
 
       const parsedDelay = parseRetryAfterHeader(retryAfterHeader);
       // Never retry faster than our current backoff, even if the header is 0 or stale.
-      const delay = Math.max(parsedDelay ?? backoff, backoff);
+      const delay = Math.min(Math.max(parsedDelay ?? backoff, backoff), 30_000);
 
       if (retries > 0) {
         console.warn(`Rate limited (429). Retrying in ${delay}ms...`);
+        await response.body?.cancel();
         // Wait for the specific timeout window
         await sleep(delay);
         // Carry the backoff forward for the next attempt.

@@ -11,6 +11,7 @@ export const sendSlack = async (name: string, telephoneNumber: string, message: 
     headers: {
       'Content-Type': 'application/json',
     },
+    signal: AbortSignal.timeout(5000),
     body: JSON.stringify({
       text: `New message from ${name}`,
       blocks: [

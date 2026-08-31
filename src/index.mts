@@ -1,5 +1,4 @@
 import compression from 'compression';
-import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 
@@ -16,15 +15,14 @@ if (!secretKey) {
 
 const app = express();
 
-app.use(cors());
 app.use(helmet());
 app.use(compression());
 app.use(express.raw({ type: 'application/x-www-form-urlencoded' }));
 app.use(rawBodyParserMiddleware);
 
-app.use(getRequestLogMiddleware(15));
-
 app.use(getAuthorizationMiddleware(secretKey));
+
+app.use(getRequestLogMiddleware(15));
 
 app.post('/sms/replies', smsReplyHandler);
 
