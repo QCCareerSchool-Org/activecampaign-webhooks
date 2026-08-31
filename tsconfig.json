@@ -48,6 +48,6 @@
       "#lib/*": [ "./src/lib/*" ],
     }
   },
-  "include": ["src"],
+  "include": ["src", "__test__"],
   "exclude": ["node_modules", "dist", "coverage"]
 }

@@ -237,6 +237,9 @@ const eslintConfig = defineConfig([
       // the base rule flags every detached mock method reference as a false positive.
       '@typescript-eslint/unbound-method': 'off',
       'jest/unbound-method': 'error',
+      // Trivial `async () => value` mocks satisfy promise-function-async without ever
+      // needing an await; the two rules are in permanent tension for this pattern.
+      '@typescript-eslint/require-await': 'off',
     },
   },
 ]);
