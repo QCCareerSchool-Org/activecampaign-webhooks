@@ -1,10 +1,12 @@
+import { fetchWithRetry } from './fetchWithRetry.mjs';
+
 const url = process.env.SLACK_WEBHOOK_URL;
 if (!url) {
   throw Error('Environment variable SLACK_WEBHOOK_URL not found');
 }
 
 export const sendSlack = async (name: string, telephoneNumber: string, message: string): Promise<void> => {
-  const response = await fetch(url, {
+  const response = await fetchWithRetry(url, {
     method: 'post',
     body: JSON.stringify({
       text: `New message from ${name}`,
