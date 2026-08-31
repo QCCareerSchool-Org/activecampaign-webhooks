@@ -3,7 +3,7 @@ import { z } from 'zod';
 import type { Webhook } from './webhook.mjs';
 import { webhookSchema } from './webhook.mjs';
 
-export type SMS = Webhook<'sms_reply'> & {
+export type SMSReply = Webhook<'sms_reply'> & {
   sms: {
     /** numeric string */
     id: string;
@@ -20,4 +20,4 @@ export const smsSchema = webhookSchema.extend({
     reply: z.string(),
     result: z.string(),
   }),
-}) satisfies z.ZodType<SMS>;
+}) satisfies z.ZodType<SMSReply>;
