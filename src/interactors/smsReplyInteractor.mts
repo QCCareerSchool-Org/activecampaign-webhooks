@@ -8,6 +8,7 @@ import { escapeMrkdwn, sendSlack } from '#lib/slack.mjs';
 export const smsReplyInteractor = async (smsReply: SMSReply): Promise<Result> => {
   const name = escapeMrkdwn(`${smsReply.contact.first_name} ${smsReply.contact.last_name}`);
   const phone = escapeMrkdwn(smsReply.contact.phone);
+  const email = escapeMrkdwn(smsReply.contact.email);
   const message = escapeMrkdwn(smsReply.sms.reply);
 
   const quotedMessage = message
@@ -22,7 +23,7 @@ export const smsReplyInteractor = async (smsReply: SMSReply): Promise<Result> =>
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `*Name:* ${name}\n*Tel:* ${phone}\n${quotedMessage}`,
+          text: `*Name:* ${name}\n${email ? `*Email:* ${email}\n` : ''}*Tel:* ${phone}\n${quotedMessage}`,
         },
       },
     ],
