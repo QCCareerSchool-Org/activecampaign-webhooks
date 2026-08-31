@@ -26,11 +26,11 @@ app.use(helmet());
 app.use(compression());
 app.use(rawBodyJsonMiddleware);
 
-app.use(getAuthorizationMiddleware(secretKey));
-
 app.use(getRequestLogMiddleware(15));
 
-app.post('/sms/reply', smsReplyHandler);
+app.use(getAuthorizationMiddleware(secretKey));
+
+app.post('/sms/replies', smsReplyHandler);
 
 app.use(globalErrorHandler);
 

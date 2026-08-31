@@ -8,6 +8,7 @@ export const getRequestLogMiddleware = (depth = 5): RequestHandler => (req, _res
   }
 
   console.dir(body, { depth });
+  console.log(req.headers);
 
   next();
 };
