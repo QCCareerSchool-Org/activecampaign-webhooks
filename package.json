@@ -1,0 +1,65 @@
+{
+  "name": "activecampaign-webhooks",
+  "version": "0.1.0",
+  "description": "",
+  "license": "UNLICENSED",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "private": "true",
+  "imports": {
+    "#domain/*": {
+      "types": "./src/domain/*",
+      "default": "./dist/domain/*"
+    },
+    "#handlers/*": {
+      "types": "./src/handlers/*",
+      "default": "./dist/handlers/*"
+    },
+    "#interactors/*": {
+      "types": "./src/interactors/*",
+      "default": "./dist/interactors/*"
+    },
+    "#lib/*": {
+      "types": "./src/lib/*",
+      "default": "./dist/lib/*"
+    }
+  },
+  "scripts": {
+    "start": "node --env-file=.env dist/index.mjs",
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "eslint",
+    "test": "jest --verbose"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^2.1.0",
+    "@eslint/js": "^9.39.5",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@swc/core": "^1.15.47",
+    "@swc/jest": "^0.2.39",
+    "@types/compression": "^1.8.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/helmet": "^0.0.48",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.13.3",
+    "dotenv": "^17.4.2",
+    "eslint": "^9.39.5",
+    "eslint-import-resolver-typescript": "^4.4.5",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jest": "^29.16.0",
+    "jest": "^30.4.2",
+    "jiti": "^2.7.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.65.0"
+  },
+  "dependencies": {
+    "@vercel/config": "^0.5.5",
+    "compression": "^1.8.1",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "generic-result-type": "^2.3.0",
+    "helmet": "^8.3.0",
+    "zod": "^4.4.3"
+  }
+}

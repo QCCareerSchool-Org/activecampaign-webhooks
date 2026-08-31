@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "noEmit": true
+  },
+  "include": [
+    "eslint.config.mts",
+    "jest.config.mts",
+    "jest.env.mts",
+    "vercel.ts",
+    "src",
+  ]
+}
