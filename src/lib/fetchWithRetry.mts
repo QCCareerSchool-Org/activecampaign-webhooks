@@ -5,9 +5,16 @@ import { sleep } from './sleep.mjs';
  *
  * Good for a single connection at a time. We should switch to a global queue to handle multiple connections.
  */
-export const fetchWithRetry = async (url: string, options: RequestInit = {}, retries = 5, backoff = 1000): Promise<Response> => {
+export const fetchWithRetry = async (url: string, options: RequestInit = {}, retries = 5, backoff = 1000, timeoutMs = 5000): Promise<Response> => {
   try {
-    const response = await fetch(url, options);
+    // A fresh signal per attempt: AbortSignal.timeout() fires once and stays
+    // tripped, so reusing one across retries would poison every later attempt.
+    // If the caller supplied their own signal, honor it alongside the timeout
+    // rather than letting one silently override the other.
+    const signal = options.signal
+      ? AbortSignal.any([ options.signal, AbortSignal.timeout(timeoutMs) ])
+      : AbortSignal.timeout(timeoutMs);
+    const response = await fetch(url, { ...options, signal });
 
     // If rate-limited, handle the 429 status code
     if (response.status === 429) {
@@ -23,7 +30,7 @@ export const fetchWithRetry = async (url: string, options: RequestInit = {}, ret
         // Wait for the specific timeout window
         await sleep(delay);
         // Carry the backoff forward for the next attempt.
-        return await fetchWithRetry(url, options, retries - 1, backoff * 2);
+        return await fetchWithRetry(url, options, retries - 1, backoff * 2, timeoutMs);
       }
     }
 
@@ -31,7 +38,7 @@ export const fetchWithRetry = async (url: string, options: RequestInit = {}, ret
   } catch (error) {
     if (retries > 0) {
       await sleep(backoff);
-      return fetchWithRetry(url, options, retries - 1, backoff * 2);
+      return fetchWithRetry(url, options, retries - 1, backoff * 2, timeoutMs);
     }
     throw error;
   }

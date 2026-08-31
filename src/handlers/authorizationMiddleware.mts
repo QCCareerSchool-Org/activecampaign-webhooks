@@ -40,5 +40,5 @@ const matches = (a: string, b: string): boolean => {
     return false;
   }
 
-  return timingSafeEqual(Buffer.from(a), Buffer.from(b));
+  return timingSafeEqual(Buffer.from(a, 'hex'), Buffer.from(b, 'hex'));
 };

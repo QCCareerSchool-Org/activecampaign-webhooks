@@ -5,30 +5,39 @@ if (!url) {
   throw Error('Environment variable SLACK_WEBHOOK_URL not found');
 }
 
-export const sendSlack = async (name: string, telephoneNumber: string, message: string): Promise<void> => {
+export interface SlackSectionBlock {
+  type: 'section';
+  text: {
+    type: 'mrkdwn' | 'plain_text';
+    text: string;
+  };
+}
+
+export interface SlackDividerBlock {
+  type: 'divider';
+}
+
+export type SlackBlock = SlackSectionBlock | SlackDividerBlock;
+
+export interface SlackMessage {
+  text: string;
+  blocks?: SlackBlock[];
+}
+
+export const escapeMrkdwn = (value: string): string => {
+  return value.replace(/&/gu, '&amp;').replace(/</gu, '&lt;').replace(/>/gu, '&gt;');
+};
+
+export const sendSlack = async (message: SlackMessage): Promise<void> => {
   const response = await fetchWithRetry(url, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
-    signal: AbortSignal.timeout(5000),
-    body: JSON.stringify({
-      text: `New message from ${name}`,
-      blocks: [
-        {
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text: `*New Message*\n*Name:* ${name}\n*Tel:* ${telephoneNumber}\n>${message}`,
-          },
-        },
-      ],
-    }),
+    body: JSON.stringify(message),
   });
 
   if (!response.ok) {
-    throw new Error(
-      `Slack webhook failed: ${response.status} ${await response.text()}`,
-    );
+    throw new Error(`Slack webhook failed: ${response.status} ${await response.text()}`);
   }
 };

@@ -10,5 +10,6 @@
     "jest.env.mts",
     "vercel.ts",
     "src",
+    "__test__",
   ]
 }

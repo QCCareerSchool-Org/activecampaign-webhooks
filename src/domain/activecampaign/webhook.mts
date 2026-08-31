@@ -13,7 +13,7 @@ export interface Webhook<T extends string = string> {
 }
 
 export const webhookSchema = z.looseObject({
-  type: z.literal('sms_reply'),
+  type: z.string(),
   date_time: z.string(), // eslint-disable-line camelcase
   initiated_from: z.string(), // eslint-disable-line camelcase
   initiated_by: z.string(), // eslint-disable-line camelcase

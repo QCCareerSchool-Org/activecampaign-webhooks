@@ -2,6 +2,7 @@ import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import importPlugin from 'eslint-plugin-import';
+import jestPlugin from 'eslint-plugin-jest';
 import tseslint from 'typescript-eslint';
 
 const eslintConfig = defineConfig([
@@ -225,6 +226,17 @@ const eslintConfig = defineConfig([
         ],
         'newlines-between': 'always',
       } ],
+    },
+  },
+  {
+    files: [ '__test__/**/*.mts' ],
+    ...jestPlugin.configs['flat/recommended'],
+    rules: {
+      ...jestPlugin.configs['flat/recommended'].rules,
+      // jest/unbound-method understands `expect(mock.method).toHaveBeenCalledWith(...)`;
+      // the base rule flags every detached mock method reference as a false positive.
+      '@typescript-eslint/unbound-method': 'off',
+      'jest/unbound-method': 'error',
     },
   },
 ]);
