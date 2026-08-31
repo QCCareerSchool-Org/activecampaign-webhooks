@@ -9,19 +9,17 @@ export interface Contact {
   phone: string;
   /** e.g., "tag1, tag2" */
   tags: string;
-  orgname: string;
   ip: string;
   fields: string[];
 }
 
 export const contactSchema = z.looseObject({
   id: z.string().regex(/^\d+$/u),
-  email: z.email(),
+  email: z.union([ z.email(), z.string().length(0) ]),
   first_name: z.string(), // eslint-disable-line camelcase
   last_name: z.string(), // eslint-disable-line camelcase
   phone: z.string(),
   tags: z.string(),
-  orgname: z.string(),
   ip: z.string(),
   fields: z.array(z.string()),
 }) satisfies z.ZodType<Contact>;
