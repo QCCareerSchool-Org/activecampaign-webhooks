@@ -7,7 +7,7 @@ import helmet from 'helmet';
 import { getAuthorizationMiddleware } from '#handlers/authorizationMiddleware.mjs';
 import { getRequestLogMiddleware } from '#handlers/getRequestLogMiddleware.mjs';
 import { globalErrorHandler } from '#handlers/globalErrorHandler.mjs';
-import { rawBodyJsonMiddleware } from '#handlers/rawBodyJsonMiddleware.mjs';
+import { rawBodyParserMiddleware } from '#handlers/rawBodyParserMiddleware.mjs';
 import { smsReplyHandler } from '#handlers/smsReplyHandler.mjs';
 
 const corsOptions: CorsOptions = {
@@ -24,7 +24,8 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(helmet());
 app.use(compression());
-app.use(rawBodyJsonMiddleware);
+app.use(express.raw({ type: 'application/x-www-form-urlencoded' }));
+app.use(rawBodyParserMiddleware);
 
 app.use(getRequestLogMiddleware(15));
 
