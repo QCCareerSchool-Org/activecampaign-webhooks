@@ -28,6 +28,7 @@ const config: JestConfig = {
     '<rootDir>/jest.env.mts',
   ],
   collectCoverage: true,
+  collectCoverageFrom: [ 'src/**/*.ts', 'src/**/*.mts' ],
 };
 
 export default config;

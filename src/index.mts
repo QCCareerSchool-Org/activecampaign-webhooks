@@ -1,9 +1,3 @@
-declare module 'node:http' {
-  interface IncomingMessage {
-    rawBody?: Buffer;
-  }
-}
-
 import compression from 'compression';
 import express from 'express';
 import helmet from 'helmet';
@@ -18,6 +12,12 @@ import { smsReplyHandler } from '#handlers/smsReplyHandler.mjs';
 const secretKey = process.env.SECRET_KEY;
 if (!secretKey) {
   throw Error('Environment variable SECRET_KEY not found.');
+}
+
+declare module 'node:http' {
+  interface IncomingMessage {
+    rawBody?: Buffer;
+  }
 }
 
 const verify = (req: IncomingMessage, _res: ServerResponse, buf: Buffer): void => {

@@ -1,4 +1,4 @@
-import { fetchWithRetry } from './fetchWithRetry.mjs';
+import ky from 'ky';
 
 const url = process.env.SLACK_WEBHOOK_URL;
 if (!url) {
@@ -29,12 +29,20 @@ export const escapeMrkdwn = (value: string): string => {
 };
 
 export const sendSlack = async (message: SlackMessage): Promise<void> => {
-  const response = await fetchWithRetry(url, {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await ky.post(url, {
+    json: message,
+    timeout: 5_000,
+    totalTimeout: 45_000,
+    retry: {
+      limit: 3,
+      methods: [ 'post' ],
+      statusCodes: [ 429, 500, 502, 503, 504 ],
+      afterStatusCodes: [ 429, 503 ],
+      backoffLimit: 30_000,
+      maxRetryAfter: 30_000,
+      jitter: true,
+      retryOnTimeout: true,
     },
-    body: JSON.stringify(message),
   });
 
   if (!response.ok) {

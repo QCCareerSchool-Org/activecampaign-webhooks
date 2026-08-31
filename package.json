@@ -59,6 +59,7 @@
     "express": "^5.2.1",
     "generic-result-type": "^2.3.0",
     "helmet": "^8.3.0",
+    "ky": "^2.1.0",
     "zod": "^4.5.4"
   }
 }
