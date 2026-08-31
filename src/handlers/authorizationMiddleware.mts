@@ -18,13 +18,13 @@ export const getAuthorizationMiddleware = (secretKey: string): RequestHandler =>
     return;
   }
 
-  if (!req.body) {
+  if (!req.rawBody) {
     res.status(500).send({ message: 'Raw body not found' });
     return;
   }
 
   const expected = createHmac('sha256', secretKey)
-    .update(req.body as Buffer)
+    .update(req.rawBody)
     .digest('hex');
 
   if (!matches(expected, received)) {

@@ -8,8 +8,8 @@ const headerName = 'x-signature';
 
 const sign = (body: string): string => createHmac('sha256', secretKey).update(Buffer.from(body)).digest('hex');
 
-const createRequest = (headers: Record<string, string | string[] | undefined>, body?: Buffer): Request => {
-  return { headers, body } as Request;
+const createRequest = (headers: Record<string, string | string[] | undefined>, rawBody?: Buffer): Request => {
+  return { headers, rawBody } as Request;
 };
 
 const createResponse = (): Response => {
