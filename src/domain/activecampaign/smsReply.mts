@@ -4,6 +4,7 @@ import type { Webhook } from './webhook.mjs';
 import { webhookSchema } from './webhook.mjs';
 
 export type SMSReply = Webhook<'sms_reply'> & {
+  list: '0';
   sms: {
     /** numeric string */
     id: string;
@@ -15,6 +16,7 @@ export type SMSReply = Webhook<'sms_reply'> & {
 
 export const smsSchema = webhookSchema.extend({
   type: z.literal('sms_reply'),
+  list: z.literal('0'),
   sms: z.looseObject({
     id: z.string().regex(/^\d+$/u),
     reply: z.string(),

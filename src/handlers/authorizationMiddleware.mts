@@ -40,5 +40,11 @@ const matches = (a: string, b: string): boolean => {
     return false;
   }
 
+  const hex64regex = /^[0-9a-fA-F]{64}$/u;
+
+  if (!hex64regex.test(a) || !hex64regex.test(b)) {
+    return false;
+  }
+
   return timingSafeEqual(Buffer.from(a, 'hex'), Buffer.from(b, 'hex'));
 };
