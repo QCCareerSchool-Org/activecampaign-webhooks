@@ -4,7 +4,7 @@ if (!url) {
 }
 
 export const sendSlack = async (name: string, telephoneNumber: string, message: string): Promise<void> => {
-  await fetch(url, {
+  const response = await fetch(url, {
     method: 'post',
     body: JSON.stringify({
       text: `New message from ${name}`,
@@ -19,4 +19,10 @@ export const sendSlack = async (name: string, telephoneNumber: string, message: 
       ],
     }),
   });
+
+  if (!response.ok) {
+    throw new Error(
+      `Slack webhook failed: ${response.status} ${await response.text()}`,
+    );
+  }
 };
