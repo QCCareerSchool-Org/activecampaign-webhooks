@@ -28,7 +28,7 @@ export const escapeMrkdwn = (value: string): string => {
   return value.replace(/&/gu, '&amp;').replace(/</gu, '&lt;').replace(/>/gu, '&gt;');
 };
 
-export const sendSlack = async (message: SlackMessage): Promise<void> => {
+export const sendSlack = async (message: SlackMessage): Promise<number> => {
   const response = await ky.post(url, {
     json: message,
     timeout: 5_000,
@@ -48,4 +48,20 @@ export const sendSlack = async (message: SlackMessage): Promise<void> => {
   if (!response.ok) {
     throw new Error(`Slack webhook failed: ${response.status} ${await response.text()}`);
   }
+
+  const json: unknown = await response.json();
+  if (isSlackResponse(json)) {
+    return json.id;
+  }
+
+  return -1;
+};
+
+interface SlackResponse {
+  id: number;
+}
+
+const isSlackResponse = (value: unknown): value is SlackResponse => {
+  return typeof value === 'object' && value !== null
+    && 'id' in value && typeof value.id === 'number';
 };
