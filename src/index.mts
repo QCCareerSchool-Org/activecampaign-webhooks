@@ -28,8 +28,9 @@ const app = express();
 
 app.use(helmet());
 app.use(compression());
-app.use(getContentTypeMiddleware([ 'application/x-www-form-urlencoded' ]));
+app.use(getContentTypeMiddleware([ 'application/x-www-form-urlencoded', 'application/json' ]));
 app.use(express.urlencoded({ extended: true, verify }));
+app.use(express.json({ verify }));
 
 app.use(getAuthorizationMiddleware(secretKey));
 
