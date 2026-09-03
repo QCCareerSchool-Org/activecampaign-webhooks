@@ -12,6 +12,10 @@ export const smsReplyInteractor = async (smsReply: SMSReply): Promise<Result> =>
   const email = escapeMrkdwn(smsReply.contact.email);
   const message = escapeMrkdwn(smsReply.sms.reply);
 
+  if (message.localeCompare('stop', 'en-US', { sensitivity: 'base' }) === 0) {
+    return success();
+  }
+
   const quotedMessage = message
     .split(/\r?\n/u)
     .map(line => `>${line}`)
